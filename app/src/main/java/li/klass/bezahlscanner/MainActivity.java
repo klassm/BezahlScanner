@@ -84,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     protected void onPause() {
-        driveFileAccessor.release();
+        if (driveFileAccessor != null) {
+            driveFileAccessor.release();
+        }
         if (googleApiClient != null) {
             googleApiClient.disconnect();
         }
