@@ -8,6 +8,11 @@ The Android app is not yet published within the Android store.
 
 Still, to use the app you have to install Google Drive and zxing Barcode Scanner on your phone. Google Drive will be used to store all the payment data.
 
+### Supported QR-Codes
+
+* Codes from BezahlCode.de
+* Codes from girocode.de (Sparkasse)
+
 ## Chrome Plugin
 
 The Chrome plugin is not yet published.
