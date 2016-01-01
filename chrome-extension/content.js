@@ -39,7 +39,7 @@ var configuration = {},
     },
     dateToString = function (date) {
         var day = padLeft(date.getDate(), "0", 2),
-            month = padLeft(date.getMonth(), "0", 2),
+            month = padLeft(date.getMonth() + 1, "0", 2),
             hours = padLeft(date.getHours(), "0", 2),
             minutes = padLeft(date.getMinutes(), "0", 2),
             seconds = padLeft(date.getSeconds(), "0", 2);
