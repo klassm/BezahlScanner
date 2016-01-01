@@ -1,0 +1,32 @@
+{
+  "name": "BezahlScanner",
+  "version": "1.0",
+  "description": "Inserts payment data into transaction forms.",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*/*"
+      ],
+      "js": [
+        "3rdparty/jquery-2.1.4.min.js",
+        "3rdparty/jquery.csv-0.71.js",
+        "content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "manifest_version": 2,
+  "web_accessible_resources": [
+    "right_arrow.png"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "permissions": [ "storage"],
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  }
+}

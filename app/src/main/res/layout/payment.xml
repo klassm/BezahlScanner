@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="3dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2015-01-01"
+        android:layout_marginRight="10dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:id="@+id/date"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/date"
+        android:text="Max Mustermann"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:id="@+id/name"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date"
+        android:layout_marginRight="10dp"
+        android:text="1633,33"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:id="@+id/amount"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date"
+        android:layout_toRightOf="@id/amount"
+        android:layout_marginRight="10dp"
+        android:text="Dies ist ein Test. Rechnungsnummer 123231293012389130124"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:id="@+id/reason"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/amount"
+        android:layout_marginRight="10dp"
+        android:text="COBADEFFXXX"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:id="@+id/bic"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/amount"
+        android:layout_toRightOf="@id/bic"
+        android:text="DE89370400440532013000"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:id="@+id/iban"/>
+</RelativeLayout>

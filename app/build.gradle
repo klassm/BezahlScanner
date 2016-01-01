@@ -1,0 +1,104 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "li.klass.bezahlscanner"
+        minSdkVersion 23
+        targetSdkVersion 23
+        versionCode 2
+        versionName "1.0.1"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("release.jks")
+            keyAlias "BezahlScanner"
+            storePassword ""
+            keyPassword ""
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-production.txt'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'APK LICENSE.txt'
+        exclude 'LICENSE.txt'
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.tngtech.java:junit-dataprovider:1.10.2'
+    testCompile 'org.assertj:assertj-core:2.2.0'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.google.zxing:android-integration:3.2.1'
+    compile 'com.google.android.gms:play-services-drive:8.4.0'
+    compile 'com.google.guava:guava:19.0'
+    compile 'org.apache.commons:commons-csv:1.2'
+    compile 'joda-time:joda-time:2.9.1'
+    compile 'org.apache.commons:commons-lang3:3.4'
+}
+
+task readSigningPasswordsFromConsole(
+        dependsOn: ['readSigningStorePasswordFromConsole', 'readSigningKeyAliasPasswordFromConsole'])
+
+task readSigningStorePasswordFromConsole << {
+    def storePassword = getBuildProperty("storePassword");
+    if (!storePassword) {
+        storePassword = readFromConsole("Store password")
+    }
+    android.signingConfigs.release.storePassword = storePassword
+}
+
+task readSigningKeyAliasPasswordFromConsole << {
+    def aliasPassword = getBuildProperty("aliasPassword");
+    if (!aliasPassword) {
+        aliasPassword = readFromConsole("Alias / Google Sites password")
+    }
+    android.signingConfigs.release.keyPassword = aliasPassword
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'packageRelease') {
+        task.dependsOn readSigningPasswordsFromConsole
+    }
+}
+
+task release(dependsOn: ['assembleRelease']) << {}
+
+def readFromConsole(String prompt) {
+    def console = System.console()
+    return new String(console.readPassword('\n\n' + prompt + '\n> '))
+}
+
+def getBuildProperty(String key) {
+    return getBuildProperties().get(key)
+}
+
+def getBuildProperties() {
+    def props = new Properties()
+    new File(System.getProperty("user.home") + "/BezahlScanner.properties").withInputStream {
+        stream -> props.load(stream)
+    }
+    return props
+}
