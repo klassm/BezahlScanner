@@ -6,27 +6,10 @@
 <body>
 
 <div>
-    <label for="driveDocumentId">Google Drive Document Id</label>
-    <input id="driveDocumentId" name="driveDocumentId"/>
-</div>
-<div>
-    <button id="save" style="display:inline-block">Save</button>
+    <button id="authorize" style="display:inline-block">Authorize for Google Drive.</button>
     <div id="status" style="margin-left: 20px;display: inline-block"></div>
 </div>
 
-<h2>Where do I find the document id?</h2>
-
-<ul>
-    <li>Install the Android app and scan a QR-Code. The first time you use the app a bezahlScannerData.csv will be
-        created within your Google Drive account.
-    </li>
-    <li>Log in to your Google drive account</li>
-    <li>Right click on the bezahlScannerData file and select 'Link abrufen/Create link'. A popup window will show
-        up.<br/>
-        <img src="options/1.png"/></li>
-    <li>Select the id (all the content after "id=")<br/>
-        <img src="options/2.png"/></li>
-</ul>
 <script type="text/javascript" src="options.js"></script>
 </body>
 </html>

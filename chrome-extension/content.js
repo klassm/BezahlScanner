@@ -1,4 +1,5 @@
 var configuration = {},
+    apiKey = "AIzaSyDShaaKkRdsKrFwyMsR1NtcoTFnSd5CzOI",
     matchers = [{
         property: 'iban',
         text: ['IBAN'],
@@ -45,33 +46,82 @@ var configuration = {},
             seconds = padLeft(date.getSeconds(), "0", 2);
         return day + "." + month + "." + date.getFullYear() + " " + hours + ":" + minutes + ":" + seconds;
     },
-    getDriveDocumentId = function (fct) {
-        chrome.storage.sync.get("driveDocumentId", function (items) {
-            fct(items.driveDocumentId);
+    getToken = function (fct) {
+        chrome.storage.sync.get("authToken", function (items) {
+            fct(items.authToken);
+        });
+    },
+    findFileId = function (token, fct) {
+        $.ajax({
+            type: "GET",
+            url: "https://www.googleapis.com/drive/v3/files?q=name+%3D+%27bezahlScannerData%27+AND+mimeType+%3D+%27text%2Fcsv%27&key=" + apiKey,
+            dataType: 'json',
+            async: false,
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            success: function (data) {
+                if (data && data.files && data.files.length > 0) {
+                    fct(data.files[0].id)
+                } else {
+                    fct(undefined);
+                }
+            }
+        });
+    },
+    getFileWebLinkForId = function (token, fileId, fct) {
+        $.ajax({
+            type: "GET",
+            url: "https://www.googleapis.com/drive/v3/files/" + fileId + "?fields=webContentLink&key=" + apiKey,
+            dataType: 'json',
+            async: false,
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            success: function (data) {
+                if (data) {
+                    fct(data.webContentLink);
+                } else {
+                    fct(undefined)
+                }
+            }
+        });
+    },
+    getFileContent = function (fct) {
+        getToken(function (token) {
+            if (!token) {
+                return;
+            }
+
+            findFileId(token, function (fileId) {
+                getFileWebLinkForId(token, fileId, function (link) {
+                    $.get(link, function (data) {
+                        fct(data);
+                    });
+                });
+            });
         });
     },
     loadData = function (fct) {
-        getDriveDocumentId(function (docId) {
-            if (!docId) {
+        getFileContent(function (content) {
+            if (!content) {
                 return;
             }
-            $.get("https://drive.google.com/uc?id=" + docId, function (result) {
-                var data = $.csv2Array(result);
-                if (data && data.length > 0) {
-                    fct(data
-                        .slice(1, data.length)
-                        .map(function (el) {
-                            return {
-                                "date": dateToString(new Date(el[0])),
-                                "name": el[1],
-                                "bic": el[2],
-                                "iban": el[3],
-                                "amount": el[4],
-                                "reason": el[5]
-                            }
-                        }));
-                }
-            });
+            var data = $.csv2Array(content);
+            if (data && data.length > 0) {
+                fct(data
+                    .slice(1, data.length)
+                    .map(function (el) {
+                        return {
+                            "date": dateToString(new Date(el[0])),
+                            "name": el[1],
+                            "bic": el[2],
+                            "iban": el[3],
+                            "amount": el[4],
+                            "reason": el[5]
+                        }
+                    }));
+            }
         });
 
     },
@@ -162,5 +212,6 @@ if (isComplete()) {
     loadData(function (data) {
         createContent(data);
     });
+} else {
+    console.log(configuration);
 }
-
