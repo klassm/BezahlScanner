@@ -2,6 +2,7 @@ package li.klass.bezahlscanner;
 
 import android.support.annotation.NonNull;
 
+import android.util.Log;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
@@ -23,12 +24,14 @@ public class DriveFileAccessor {
     private final GoogleApiClient googleApiClient;
     private DriveId driveId;
     private DataHolder dataHolder = new DataHolder("");
+    private static final String TAG = DriveFileAccessor.class.getName();
 
     public DriveFileAccessor(GoogleApiClient googleApiClient) {
         this.googleApiClient = googleApiClient;
     }
 
     public void start(InitDone initDone) {
+        Log.e(TAG, "start() - starting accessor");
         Query query = new Query.Builder().addFilter(Filters.eq(SearchableField.TITLE, FILE_TITLE)).build();
         Drive.DriveApi.query(googleApiClient, query)
                 .setResultCallback(queryCallback(initDone));
@@ -40,10 +43,12 @@ public class DriveFileAccessor {
             @Override
             public void onResult(@NonNull final DriveApi.MetadataBufferResult result) {
                 if (!result.getStatus().isSuccess()) {
+                    Log.e(TAG, "queryCallback() - query result is error");
                     return;
                 }
 
                 if (result.getMetadataBuffer().getCount() == 0) {
+                    Log.i(TAG, "queryCallback() - creating new file");
                     createNewFile(new FileLoadedCallback() {
 
                         @Override
@@ -54,6 +59,7 @@ public class DriveFileAccessor {
                         }
                     });
                 } else {
+                    Log.i(TAG, "queryCallback() - using existing file");
                     loadFileContent(result.getMetadataBuffer().get(0).getDriveId());
                     result.release();
                     initDone.onInitDone();
@@ -117,13 +123,10 @@ public class DriveFileAccessor {
         return dataHolder.getPayments();
     }
 
-    public void addZahlung(Payment payment) {
+    public void addPayment(Payment payment) {
         dataHolder.addPayment(payment);
 
         new WriteContentsAsyncTask(googleApiClient, dataHolder.toCsv()).execute(driveId.asDriveFile());
-    }
-
-    public void release() {
     }
 
     private interface FileLoadedCallback {

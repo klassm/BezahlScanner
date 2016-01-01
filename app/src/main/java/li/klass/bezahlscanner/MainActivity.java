@@ -8,26 +8,32 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.google.android.gms.auth.api.Auth;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final int REQUEST_CODE_RESOLUTION = 1;
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 1;
+    private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient googleApiClient;
     private DriveFileAccessor driveFileAccessor;
     private QrCodeTextParser qrCodeTextParser = new QrCodeTextParser(new DateTimeProvider());
+
+    private static final String TAG = MainActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (scanResult != null && driveFileAccessor != null) {
             Payment payment = qrCodeTextParser.parse(scanResult.getContents());
             if (payment != null) {
-                driveFileAccessor.addZahlung(payment);
+                driveFileAccessor.addPayment(payment);
                 updatePaymentsView();
                 msg = String.format(getString(R.string.payment_added_message), payment.getName());
             } else {
@@ -62,39 +68,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
             Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-        } else if (requestCode == RESOLVE_CONNECTION_REQUEST_CODE && resultCode == RESULT_OK) {
-            googleApiClient.connect();
+        } else if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
+            if (result.isSuccess()) {
+                Log.e(TAG, "sign in success");
+                if (googleApiClient != null) {
+                    connect();
+                }
+            } else {
+                Log.e(TAG, result.getStatus().toString());
+            }
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (googleApiClient== null) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Drive.API)
-                    .addScope(Drive.SCOPE_FILE)
-                    .addScope(Drive.SCOPE_APPFOLDER) // required for App Folder sample
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-        }
-        googleApiClient.connect();
-    }
-
-    @Override
-    protected void onPause() {
-        if (driveFileAccessor != null) {
-            driveFileAccessor.release();
-        }
-        if (googleApiClient != null) {
-            googleApiClient.disconnect();
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
+    private void connect() {
+        Log.e(TAG, "sign in success");
         driveFileAccessor = new DriveFileAccessor(googleApiClient);
         driveFileAccessor.start(new DriveFileAccessor.InitDone() {
             @Override
@@ -104,16 +92,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (googleApiClient == null) {
+            GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestScopes(Drive.SCOPE_FILE, Drive.SCOPE_APPFOLDER)
+                    .build();
+
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, 0, this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                    .addApi(Drive.API)
+                    .build();
+
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        } else {
+            googleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.stopAutoManage(this);
+            googleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+
     private void updatePaymentsView() {
         ((PaymentAdapter) ((ListView) findViewById(R.id.payments)).getAdapter()).setData(driveFileAccessor.getPayments());
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
     public void onConnectionFailed(@NonNull ConnectionResult result) {
+        Log.e(TAG, result.toString());
         if (result.hasResolution()) {
             try {
                 result.startResolutionForResult(this, REQUEST_CODE_RESOLUTION);
