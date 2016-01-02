@@ -15,5 +15,4 @@ task clean << {
 }
 
 task release(dependsOn: createZip) << {
-
 }
