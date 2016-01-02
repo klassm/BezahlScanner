@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.google.common.base.Charsets;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -18,7 +20,10 @@ public class QrCodeTextParser {
 
     public Payment parse(String text) {
 
-        text = text.trim();
+        text = StringUtils.trimToNull(text);
+        if (text == null) {
+            return null;
+        }
         if (text.startsWith(SINGLEPAYMENT_PREFIX)) {
             return parseSinglePayments(text);
         } else if (text.startsWith("BCD")) {
@@ -28,9 +33,11 @@ public class QrCodeTextParser {
         }
     }
 
-    @NonNull
     private Payment parseGirocode(String text) {
         String[] lines = text.split("[\r\n]");
+        if (lines.length < 11) {
+            return null;
+        }
 
         /**
          BCD
