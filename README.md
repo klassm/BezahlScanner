@@ -4,9 +4,9 @@ Scan QR-Codes for payments comfortably on your Android phone. When logging in to
 
 ## Android
 
-The Android app is not yet published within the Android store.
+The Android App is currently published as Beta App. To install the app agree the [[https://play.google.com/apps/testing/li.klass.bezahlscanner|beta agreement]]. In addition, make sure to also install [[https://play.google.com/store/apps/details?id=com.google.zxing.client.android&hl=de|zxing Barcode scanner]] and the [[https://play.google.com/store/apps/details?id=com.google.android.apps.docs&hl=de|Google Drive app]].
 
-Still, to use the app you have to install Google Drive and zxing Barcode Scanner on your phone. Google Drive will be used to store all the payment data.
+
 
 #### Supported QR-Codes
 
