@@ -32,15 +32,16 @@
     "https://www.googleapis.com/",
     "https://accounts.google.com/"
   ],
-  "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
-  },
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkWjCm/o3np9EqjDGiHKELxZvizIbxTN3HmFn+msIAOLlOgxwQvMJsM8Z3GQk6Ip1LfOyZo7Np6Bkqcb6ZeVWuxcKtbCyvI9DTyrUTQZ9/vjCi6FFN3/wOiRCxOXdPJtbSNuIS3bRQeCf7dHeAMpYgQtOtxIaAcELl4SRHvjzjsK02yZyFsuR7BsPLkPpSrwEihZxN1q+4AE/ty/F8Ty1xU97s2GRMq0xf3v2v6v0NRoFFcgr8/SzQMl6ZChPIizIbDTnyEzA3U4PLiJ/fLz96kGh90c7oqCJH1AUhQYa2amKhLNxgmI3uzFYQL84mzLLiMrL01ajV6Snk8hLJtwIXwIDAQAB",
   "oauth2": {
     "client_id": "534390396217-ms2tirs6bb98ro93759opq8r9h43ku93.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/drive"
+    ]
+  },
+  "background": {
+    "scripts": [
+      "background.js"
     ]
   }
 }
