@@ -1,6 +1,6 @@
 {
   "name": "BezahlScanner",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Inserts payment data into transaction forms.",
   "content_scripts": [
     {
