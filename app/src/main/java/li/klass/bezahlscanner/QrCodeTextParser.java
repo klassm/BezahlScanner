@@ -35,7 +35,7 @@ public class QrCodeTextParser {
 
     private Payment parseGirocode(String text) {
         String[] lines = text.split("[\r\n]");
-        if (lines.length < 11) {
+        if (lines.length < 10) {
             return null;
         }
 
@@ -51,15 +51,18 @@ public class QrCodeTextParser {
          CASH
 
          Test123
-
          */
+
+        // Field 'reason' after first empty line
+        int indexEmptyLine = Arrays.asList(lines).indexOf("");
+
         return new Payment.Builder()
                 .withDate(dateTimeProvider.now())
                 .withBic(lines[4])
                 .withName(lines[5])
                 .withIban(lines[6])
                 .withAmount(lines[7].replaceAll("[A-Za-z]+", ""))
-                .withReason(lines[10])
+                .withReason(lines[indexEmptyLine > 0 ? indexEmptyLine+1 : 10])
                 .build();
     }
 
