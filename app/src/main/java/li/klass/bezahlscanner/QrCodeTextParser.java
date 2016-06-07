@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Arrays;
 
 public class QrCodeTextParser {
 
@@ -62,7 +63,7 @@ public class QrCodeTextParser {
                 .withName(lines[5])
                 .withIban(lines[6])
                 .withAmount(lines[7].replaceAll("[A-Za-z]+", ""))
-                .withReason(lines[indexEmptyLine > 0 ? indexEmptyLine+1 : 10])
+                .withReason(lines[indexEmptyLine > 0 ? indexEmptyLine + 1 : 10])
                 .build();
     }
 
