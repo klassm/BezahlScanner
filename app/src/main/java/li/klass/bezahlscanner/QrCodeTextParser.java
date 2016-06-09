@@ -63,6 +63,7 @@ public class QrCodeTextParser {
                 .withName(lines[5])
                 .withIban(lines[6])
                 .withAmount(lines[7].replaceAll("[A-Za-z]+", ""))
+                .withCurrency(lines[7].replaceAll("[^A-Za-z]+", ""))
                 .withReason(lines[indexEmptyLine > 0 ? indexEmptyLine + 1 : 10])
                 .build();
     }

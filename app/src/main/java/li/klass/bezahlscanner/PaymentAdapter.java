@@ -8,7 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 public class PaymentAdapter extends ArrayAdapter<Payment> {
 
@@ -33,7 +36,7 @@ public class PaymentAdapter extends ArrayAdapter<Payment> {
         setText(convertView, R.id.name, item.getName());
         setText(convertView, R.id.iban, formatIBAN(item.getIban()));
         setText(convertView, R.id.bic, formatBIC(item.getBic()));
-        setText(convertView, R.id.amount, formatAmount(item.getAmount()));
+        setText(convertView, R.id.amount, formatAmount(item.getAmount(), item.getCurrency()));
         setText(convertView, R.id.reason, item.getReason());
 
         return convertView;
@@ -58,15 +61,39 @@ public class PaymentAdapter extends ArrayAdapter<Payment> {
     private String formatAsPackages(String value, int packageSize, String packageSeparator) {
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= value.length(); i++) {
-            sb.append(value.charAt(i-1));
+            sb.append(value.charAt(i - 1));
             if (i % packageSize == 0) sb.append(packageSeparator);
         }
         return sb.toString();
     }
 
-    private String formatAmount(String amount) {
-        if (amount == null || amount.isEmpty()) amount = "0.00";
-        return NumberFormat.getCurrencyInstance().format(Double.parseDouble(amount));
+    private String formatAmount(String amount, String currency) {
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(2);
+        nf.setGroupingUsed(true);
+        try {
+            amount = nf.format(parseAmount(amount));
+        } catch (Exception e) {}
+        return getCurrencySymbol(currency) + " " + amount;
+    }
+
+    private double parseAmount(String amount) throws ParseException {
+        if (amount == null || amount.isEmpty()) return 0.0;
+        try {
+            return NumberFormat.getInstance().parse(amount).doubleValue();
+        } catch (ParseException e) {
+            return NumberFormat.getInstance(Locale.US).parse(amount).doubleValue();
+        }
+    }
+
+    private String getCurrencySymbol(String currency) {
+        if (currency == null || currency.isEmpty()) return "€";
+        try {
+            return Currency.getInstance(currency).getSymbol();
+        } catch (Exception e) {
+            return currency;
+        }
     }
 
     private void setText(View convertView, int id, String value) {
