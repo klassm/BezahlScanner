@@ -40,20 +40,6 @@ public class QrCodeTextParser {
             return null;
         }
 
-        /**
-         BCD
-         001
-         1
-         SCT
-         AUGSDE77XXX
-         Matthias Klass
-         DE11720500000000061390
-         EUR123
-         CASH
-
-         Test123
-         */
-
         // Field 'reason' after first empty line
         int indexEmptyLine = Arrays.asList(lines).indexOf("");
 
