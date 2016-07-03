@@ -7,6 +7,7 @@ public class Payment {
     private String iban;
     private String bic;
     private String amount;
+    private String currency;
     private String reason;
     private DateTime date;
 
@@ -16,6 +17,7 @@ public class Payment {
         iban = builder.iban;
         bic = builder.bic;
         amount = builder.amount;
+        currency = builder.currency;
         reason = builder.reason;
         date = builder.date;
     }
@@ -36,6 +38,10 @@ public class Payment {
         return amount;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
     public String getReason() {
         return reason;
     }
@@ -49,6 +55,7 @@ public class Payment {
         private String iban;
         private String bic;
         private String amount;
+        private String currency;
         private String reason;
         private DateTime date;
 
@@ -72,6 +79,11 @@ public class Payment {
 
         public Builder withAmount(String val) {
             amount = val;
+            return this;
+        }
+
+        public Builder withCurrency(String val) {
+            currency = val;
             return this;
         }
 
@@ -101,6 +113,7 @@ public class Payment {
         if (iban != null ? !iban.equals(payment.iban) : payment.iban != null) return false;
         if (bic != null ? !bic.equals(payment.bic) : payment.bic != null) return false;
         if (amount != null ? !amount.equals(payment.amount) : payment.amount != null) return false;
+        if (currency != null ? !currency.equals(payment.currency) : payment.currency != null) return false;
         if (reason != null ? !reason.equals(payment.reason) : payment.reason != null)
             return false;
         return !(date != null ? !date.equals(payment.date) : payment.date != null);
@@ -113,6 +126,7 @@ public class Payment {
         result = 31 * result + (iban != null ? iban.hashCode() : 0);
         result = 31 * result + (bic != null ? bic.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + (currency != null ? currency.hashCode() : 0);
         result = 31 * result + (reason != null ? reason.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
@@ -125,6 +139,7 @@ public class Payment {
                 ", iban='" + iban + '\'' +
                 ", bic='" + bic + '\'' +
                 ", amount='" + amount + '\'' +
+                ", currency='" + currency + '\'' +
                 ", reason='" + reason + '\'' +
                 ", date=" + date +
                 '}';
