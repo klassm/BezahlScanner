@@ -22,8 +22,23 @@ public class QrCodeTextParserTest {
     @DataProvider
     public static Object[][] provider() {
         return $$(
-                $(girocode())
+                $(girocode()),
+                $(bezahlcode())
         );
+    }
+
+    private static TestCase bezahlcode() {
+        return new TestCase("bezahlcode")
+                .withText("bank://singlepaymentsepa?name=MATTHIAS%20KLASS&reason=Test123&iban=DE11720500000000061390&bic=AUGSDE77XXX&amount=123")
+                .thenExpect(new Payment.Builder()
+                        .withIban("DE11720500000000061390")
+                        .withAmount("123")
+                        .withCurrency("EUR")
+                        .withBic("AUGSDE77XXX")
+                        .withDate(NOW)
+                        .withName("MATTHIAS KLASS")
+                        .withReason("Test123")
+                        .build());
     }
 
     private static TestCase girocode() {

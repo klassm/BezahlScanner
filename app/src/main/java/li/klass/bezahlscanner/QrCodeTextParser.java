@@ -89,6 +89,7 @@ public class QrCodeTextParser {
                     break;
             }
         }
+        builder.withCurrency("EUR");
         return builder.build();
     }
 }
