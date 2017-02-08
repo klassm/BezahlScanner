@@ -13,3 +13,7 @@ Currently, QR codes from [GiroCode](https://www.girocode.de) and [BezahlCode](ht
 You can find the the Chrome plugin in the [Chrome store web page](https://chrome.google.com/webstore/detail/bezahlscanner/aebjeejojgchggdnbihchgfcjnbnaahm).
 
 When opening up the transaction form on your favorite bank's web page (currently supported: Sparkasse, ComDirect, DAB and Diba), the plugin will offer a link called "BezahlScanner". When clicking the link you will see a table of your most recently scanned QR codes. Just click on on of them and your transaction data will be magically filled in.
+
+## Data Privacy
+
+BezahlScanner will never access any private data except for the purpose of reading and saving data from and to Google Drive. If you don't believe me check out the source code or sniff the network traffic!
