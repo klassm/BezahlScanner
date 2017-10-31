@@ -3,6 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'net.researchgate.release'
 
 buildscript {
     ext.kotlin_version = '1.1.51'
@@ -11,12 +12,18 @@ buildscript {
         jcenter()
         google()
         mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
         classpath 'com.google.gms:google-services:3.1.2'
         classpath 'com.android.tools.build:gradle:3.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'net.researchgate:gradle-release:2.4.0'
     }
+}
+
+def getAppVersionCode() {
+    return Integer.valueOf(version.replaceAll("\\.", "").replace("-SNAPSHOT", ""))
 }
 
 android {
@@ -28,16 +35,16 @@ android {
         applicationId "li.klass.bezahlscanner"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 6
-        versionName "1.0.6"
+        versionCode getAppVersionCode()
+        versionName version
     }
 
     signingConfigs {
         release {
             storeFile file("release.jks")
             keyAlias "BezahlScanner"
-            storePassword ""
-            keyPassword ""
+            storePassword getPropertyOrEmptyString("bezahlScannerReleaseStorePassword")
+            keyPassword getPropertyOrEmptyString("bezahlScannerReleaseAliasPassword")
         }
     }
 
@@ -64,7 +71,7 @@ android {
 ext {
     supportLibVersion = '26.1.0'
     ankoVersion = '0.10.1'
-    playServicesVersion='11.4.2'
+    playServicesVersion = '11.4.2'
 }
 
 dependencies {
@@ -78,7 +85,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:$supportLibVersion"
     compile "com.android.support:design:$supportLibVersion"
     compile "com.google.zxing:android-integration:3.2.1"
-    compile ("com.google.android.gms:play-services:$playServicesVersion") {
+    compile("com.google.android.gms:play-services:$playServicesVersion") {
         exclude group: 'com.android.support'
     }
     compile "com.google.guava:guava:23.3-android"
@@ -91,56 +98,21 @@ dependencies {
     compile "org.jetbrains.anko:anko-sdk25-coroutines:$ankoVersion"
     compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$ankoVersion"
     compile "org.jetbrains.anko:anko-coroutines:$ankoVersion"
-    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:multidex:1.0.2'
 }
 
 kotlin {
     experimental { coroutines "enable" }
 }
 
-task readSigningPasswordsFromConsole(
-        dependsOn: ['readSigningStorePasswordFromConsole', 'readSigningKeyAliasPasswordFromConsole'])
-
-task readSigningStorePasswordFromConsole << {
-    def storePassword = getBuildProperty("storePassword");
-    if (!storePassword) {
-        storePassword = readFromConsole("Store password")
-    }
-    android.signingConfigs.release.storePassword = storePassword
+release {
+    buildTasks = ['build']
 }
 
-task readSigningKeyAliasPasswordFromConsole << {
-    def aliasPassword = getBuildProperty("aliasPassword");
-    if (!aliasPassword) {
-        aliasPassword = readFromConsole("Alias / Google Sites password")
-    }
-    android.signingConfigs.release.keyPassword = aliasPassword
+def getPropertyOrEmptyString(key) {
+    if (project.hasProperty(key)) {
+        return project.getProperties().get(key)
+    } else return ""
 }
-
-tasks.whenTaskAdded { task ->
-    if (task.name == 'packageRelease') {
-        task.dependsOn readSigningPasswordsFromConsole
-    }
-}
-
-task release(dependsOn: ['assembleRelease']) << {}
-
-def readFromConsole(String prompt) {
-    def console = System.console()
-    return new String(console.readPassword('\n\n' + prompt + '\n> '))
-}
-
-def getBuildProperty(String key) {
-    return getBuildProperties().get(key)
-}
-
-def getBuildProperties() {
-    def props = new Properties()
-    new File(System.getProperty("user.home") + "/BezahlScanner.properties").withInputStream {
-        stream -> props.load(stream)
-    }
-    return props
-}
-
 
 apply plugin: 'com.google.gms.google-services'
