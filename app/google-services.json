@@ -1,51 +1,58 @@
 {
   "project_info": {
-    "project_id": "bezahlscanner",
     "project_number": "534390396217",
-    "name": "bezahlscanner"
+    "firebase_url": "https://bezahlscanner.firebaseio.com",
+    "project_id": "bezahlscanner"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:534390396217:android:b42726354f20b81f",
-        "client_id": "android:li.klass.bezahlscanner",
-        "client_type": 1,
         "android_client_info": {
           "package_name": "li.klass.bezahlscanner"
         }
       },
       "oauth_client": [
         {
+          "client_id": "534390396217-k9fauf8n87m1vkq2sgkd30s1ri55nnu9.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "534390396217-3pm9pvda799sv98d88t4mocpmdu2qbc8.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
           "client_id": "534390396217-ql74uq1n6ed67jtsdg3993kfcoo5d98r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "li.klass.bezahlscanner",
-            "certificate_hash": "690295785C339669D789FDE3ACAD24677D103A80"
+            "certificate_hash": "690295785c339669d789fde3acad24677d103a80"
           }
         }
       ],
-      "api_key": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx3vmFQh89Le2iQ-s8L1ixWuixT-OZW7Q"
+        }
+      ],
       "services": {
         "analytics_service": {
           "status": 1
         },
-        "cloud_messaging_service": {
-          "status": 1,
-          "apns_config": []
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "google_signin_service": {
-          "status": 2
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "534390396217-k9fauf8n87m1vkq2sgkd30s1ri55nnu9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }
   ],
-  "client_info": [],
-  "ARTIFACT_VERSION": "1"
+  "configuration_version": "1"
 }
