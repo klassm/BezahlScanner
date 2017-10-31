@@ -6,7 +6,7 @@ object Parsers {
     private val dateTimeProvider = DateTimeProvider()
     val allParsers = listOf(
             GirocodeParser(dateTimeProvider),
-            SinglePaymentParser(dateTimeProvider),
+            BezahlCodeParser(dateTimeProvider),
             SwissQrCodeParser(dateTimeProvider)
     )
 }

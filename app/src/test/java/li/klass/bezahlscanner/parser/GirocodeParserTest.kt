@@ -64,4 +64,32 @@ class GirocodeParserTest {
                 reason = ""
         ))
     }
+
+    @Test
+    fun should_parse_minimal() {
+        val toParse = """
+            BCD
+            001
+            1
+            SCT
+            BIC
+            John Doe
+            IBAN
+        """.trimIndent()
+
+        val now = DateTime.now()
+        val dateTimeProvider = mock<DateTimeProvider> { on { now() } doReturn now }
+        val parser = GirocodeParser(dateTimeProvider)
+
+        assertThat(parser.canParse(toParse)).isTrue()
+        assertThat(parser.parse(toParse)).isEqualTo(Payment(
+                iban = "IBAN",
+                amount = "",
+                currency = "EUR",
+                bic = "BIC",
+                date = now,
+                name = "John Doe",
+                reason = ""
+        ))
+    }
 }
