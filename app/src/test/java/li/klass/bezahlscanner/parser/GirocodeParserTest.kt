@@ -38,7 +38,6 @@ class GirocodeParserTest {
         ))
     }
 
-
     @Test
     fun should_parse_without_reason() {
         val toParse = "BCD\n" +
