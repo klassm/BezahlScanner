@@ -11,7 +11,6 @@ import org.junit.Test
 class GirocodeParserTest {
     @Test
     fun should_parse() {
-
         val toParse = "BCD\n" +
                 "001\n" +
                 "1\n" +
@@ -36,6 +35,34 @@ class GirocodeParserTest {
                 date = now,
                 name = "Matthias Klass",
                 reason = "Test123"
+        ))
+    }
+
+
+    @Test
+    fun should_parse_without_reason() {
+        val toParse = "BCD\n" +
+                "001\n" +
+                "2\n" +
+                "SCT\n" +
+                "SOLADES1PFD\n" +
+                "Girosolution GmbH\n" +
+                "DE19690516200000581900\n" +
+                "EUR1"
+
+        val now = DateTime.now()
+        val dateTimeProvider = mock<DateTimeProvider> { on { now() } doReturn now }
+        val parser = GirocodeParser(dateTimeProvider)
+
+        assertThat(parser.canParse(toParse)).isTrue()
+        assertThat(parser.parse(toParse)).isEqualTo(Payment(
+                iban = "DE19690516200000581900",
+                amount = "1",
+                currency = "EUR",
+                bic = "SOLADES1PFD",
+                date = now,
+                name = "Girosolution GmbH",
+                reason = ""
         ))
     }
 }

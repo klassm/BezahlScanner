@@ -7,7 +7,7 @@ import java.util.*
 class GirocodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
     override fun parse(value: String): Payment? {
         val lines = value.split("[\r\n]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        if (lines.size < 10) {
+        if (lines.size < 7) {
             return null
         }
 
@@ -21,7 +21,7 @@ class GirocodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
                 iban = lines[6],
                 amount = lines[7].replace("[A-Za-z]+".toRegex(), ""),
                 currency = lines[7].replace("[^A-Za-z]+".toRegex(), ""),
-                reason = lines[if (indexEmptyLine > 0) indexEmptyLine + 1 else 10])
+                reason = if (lines.size < 10) "" else lines[if (indexEmptyLine > 0) indexEmptyLine + 1 else 10])
     }
 
     override fun canParse(value: String): Boolean = value.startsWith("BCD")
