@@ -1,5 +1,8 @@
 package li.klass.bezahlscanner
 
+import org.apache.commons.lang3.builder.EqualsBuilder
+import org.apache.commons.lang3.builder.HashCodeBuilder
+import org.apache.commons.lang3.builder.ToStringBuilder
 import org.joda.time.DateTime
 
 class Payment(val name: String,
@@ -10,15 +13,7 @@ class Payment(val name: String,
               val reason: String,
               val date: DateTime
 ) {
-    override fun toString(): String {
-        return "Payment{" +
-                "name='" + name + '\'' +
-                ", iban='" + iban + '\'' +
-                ", bic='" + bic + '\'' +
-                ", amount='" + amount + '\'' +
-                ", currency='" + currency + '\'' +
-                ", reason='" + reason + '\'' +
-                ", date=" + date +
-                '}'
-    }
+    override fun toString(): String = ToStringBuilder.reflectionToString(this)
+    override fun equals(other: Any?): Boolean = EqualsBuilder.reflectionEquals(this, other)
+    override fun hashCode(): Int = HashCodeBuilder.reflectionHashCode(this)
 }

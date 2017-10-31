@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
 
     private var googleApiClient: GoogleApiClient? = null
     private var driveFileAccessor: DriveFileAccessor? = null
-    private val qrCodeTextParser = QrCodeTextParser(DateTimeProvider())
+    private val qrCodeTextParser = QrCodeTextParser()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
