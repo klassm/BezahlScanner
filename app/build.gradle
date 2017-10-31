@@ -30,11 +30,16 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
 
+
+    lintOptions {
+        abortOnError false
+    }
+
     defaultConfig {
         multiDexEnabled true
-        applicationId "li.klass.bezahlscanner"
+        applicationId "li.klass.bezahl.scanner"
         minSdkVersion 17
-        targetSdkVersion 23
+        targetSdkVersion 26
         versionCode getAppVersionCode()
         versionName version
     }
@@ -43,8 +48,6 @@ android {
         release {
             storeFile file("release.jks")
             keyAlias "BezahlScanner"
-            storePassword getPropertyOrEmptyString("bezahlScannerReleaseStorePassword")
-            keyPassword getPropertyOrEmptyString("bezahlScannerReleaseAliasPassword")
         }
     }
 
@@ -109,10 +112,11 @@ release {
     buildTasks = ['build']
 }
 
-def getPropertyOrEmptyString(key) {
-    if (project.hasProperty(key)) {
-        return project.getProperties().get(key)
-    } else return ""
+if (project.hasProperty('bezahlScannerReleaseStorePassword')) {
+    android.signingConfigs.release.storePassword = bezahlScannerReleaseStorePassword
+}
+if (project.hasProperty('bezahlScannerReleaseAliasPassword')) {
+    android.signingConfigs.release.keyPassword = bezahlScannerReleaseAliasPassword
 }
 
 apply plugin: 'com.google.gms.google-services'

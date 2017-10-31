@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "534390396217-d2a5fi8gemv6bkal3t50tdj5veqrk94i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "li.klass.bezahlscanner",
+            "certificate_hash": "882c9245f46b0c4e9cd5da08f29a63daab197273"
+          }
+        },
+        {
           "client_id": "534390396217-k9fauf8n87m1vkq2sgkd30s1ri55nnu9.apps.googleusercontent.com",
           "client_type": 3
         },
@@ -47,6 +55,41 @@
               "client_type": 3
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:534390396217:android:34067781746a48a6",
+        "android_client_info": {
+          "package_name": "li.klass.bezahl.scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "534390396217-k9fauf8n87m1vkq2sgkd30s1ri55nnu9.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "534390396217-3pm9pvda799sv98d88t4mocpmdu2qbc8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx3vmFQh89Le2iQ-s8L1ixWuixT-OZW7Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
