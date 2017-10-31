@@ -24,6 +24,7 @@ android {
     buildToolsVersion "26.0.2"
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "li.klass.bezahlscanner"
         minSdkVersion 17
         targetSdkVersion 23
@@ -89,6 +90,7 @@ dependencies {
     compile "org.jetbrains.anko:anko-sdk25-coroutines:$ankoVersion"
     compile "org.jetbrains.anko:anko-appcompat-v7-coroutines:$ankoVersion"
     compile "org.jetbrains.anko:anko-coroutines:$ankoVersion"
+    compile 'com.android.support:multidex:1.0.0'
 }
 
 kotlin {

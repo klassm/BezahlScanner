@@ -10,6 +10,9 @@ import com.google.android.gms.drive.MetadataChangeSet
 import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
 
 class DriveFileAccessor(private val googleApiClient: GoogleApiClient) {
     private var driveId: DriveId? = null
@@ -54,32 +57,26 @@ class DriveFileAccessor(private val googleApiClient: GoogleApiClient) {
     private fun createNewFile(callback: FileLoadedCallback) {
 
         Drive.DriveApi.newDriveContents(googleApiClient)
-                .setResultCallback(ResultCallback { result ->
-                    if (!result.status.isSuccess) {
-                        return@ResultCallback
-                    }
+                .setResultCallback({ result ->
+                    if (result.status.isSuccess) {
+                        async(UI) {
+                            bg {
+                                val changeSet = MetadataChangeSet.Builder()
+                                        .setTitle(FILE_TITLE)
+                                        .setMimeType("text/csv")
+                                        .setStarred(false).build()
 
-                    val driveContents = result.driveContents
-
-                    // Perform I/O off the UI thread.
-                    object : Thread() {
-                        override fun run() {
-                            val changeSet = MetadataChangeSet.Builder()
-                                    .setTitle(FILE_TITLE)
-                                    .setMimeType("text/csv")
-                                    .setStarred(false).build()
-
-                            // create a file on root folder
-                            Drive.DriveApi.getRootFolder(googleApiClient)
-                                    .createFile(googleApiClient, changeSet, driveContents)
-                                    .setResultCallback(ResultCallback { driveFileResult ->
-                                        if (!driveFileResult.status.isSuccess) {
-                                            return@ResultCallback
-                                        }
-                                        callback.onLoaded(driveFileResult.driveFile.driveId)
-                                    })
+                                // create a file on root folder
+                                Drive.DriveApi.getRootFolder(googleApiClient)
+                                        .createFile(googleApiClient, changeSet, result.driveContents)
+                                        .setResultCallback({ driveFileResult ->
+                                            if (driveFileResult.status.isSuccess) {
+                                                callback.onLoaded(driveFileResult.driveFile.driveId)
+                                            }
+                                        })
+                            }
                         }
-                    }.start()
+                    }
                 })
     }
 
