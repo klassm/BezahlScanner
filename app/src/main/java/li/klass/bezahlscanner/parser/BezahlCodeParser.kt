@@ -6,7 +6,7 @@ import li.klass.bezahlscanner.Payment
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 
-class SinglePaymentParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
+class BezahlCodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
     override fun canParse(value: String): Boolean = value.startsWith(SINGLEPAYMENT_PREFIX)
 
     override fun parse(value: String): Payment? {
