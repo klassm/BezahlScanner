@@ -9,10 +9,6 @@ var configuration = {},
         text: ['BEGÜNSTIGTER', 'EMPFÄNGER'],
         required: true
     }, {
-        property: 'iban',
-        text: ['IBAN'],
-        required: true
-    }, {
         property: 'bic',
         text: ['BIC'],
         required: false
@@ -171,7 +167,9 @@ var configuration = {},
         if (data.length == 0) {
             return;
         }
-        var content = $("<div id='bezahlScanner'/>"),
+        data = data.slice(data.length - 5, data.length)
+
+        var content = $("<div id='bezahlScanner' class='block'/>"),
             table = createContentTable(data),
             header = $("<a href='#'>BezahlScanner</a>");
 
@@ -183,28 +181,31 @@ var configuration = {},
             table.toggle(1000);
         });
 
-        $(".if5_schrittfolge,.content-header,#f1-messages,#moneyTransfer_transferDataForm_accountDetails").after(content);
+        // .cbox-banking: Sparkasse
+        $(".if5_schrittfolge,.content-header,#f1-messages,#moneyTransfer_transferDataForm_accountDetails,.cbox-banking").prepend(content);
+    },
+    matchersFor = function (text) {
+        text = text.toUpperCase()
+        return matchers.filter(function (matcher) {
+            return matcher.text.find(function (matcherText) {
+                return text.indexOf(matcherText) != -1
+            })
+        });
     };
 
-$("label").each(function () {
+$("label,div.label").each(function () {
     var obj = $(this);
-    var text = obj.text().toUpperCase();
 
-    matchers.forEach(function (m) {
-        m.text.forEach(function (t) {
-            if (text.indexOf(t) != -1) {
-                var labelForId = obj.attr("for");
-                if (labelForId) {
-                    configuration[m.property] = labelForId;
-                } else {
-                    var input = $(obj.parent()).find("input[type!=hidden],textarea:visible");
-                    if (input) {
-                        configuration[m.property] = input.attr("id");
-                    }
-                }
+    matchersFor(obj.text()).forEach(function (matcher) {
+        var labelForId = obj.attr("for");
+        if (labelForId) {
+            configuration[matcher.property] = labelForId;
+        } else {
+            var input = $(obj.parent()).find("input[type!=hidden],textarea:visible");
+            if (input) {
+                configuration[matcher.property] = input.attr("id");
             }
-        })
-
+        }
     });
 });
 
