@@ -31,7 +31,7 @@ class PaymentAdapter(context: Context) : ArrayAdapter<Payment>(context, LAYOUT) 
     fun setData(payments: List<Payment>) {
         clear()
 
-        addAll(payments)
+        addAll(payments.sortedByDescending { it.date })
         notifyDataSetChanged()
     }
 
