@@ -28,7 +28,7 @@ class BezahlCodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
 
         for (part in parts) {
             val elements = part.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val splitKey = elements[0]
+            val splitKey = elements.getOrElse(0, { "" })
             val splitValue = elements.getOrElse(1, { "" })
             when (splitKey) {
                 "name" -> name = splitValue

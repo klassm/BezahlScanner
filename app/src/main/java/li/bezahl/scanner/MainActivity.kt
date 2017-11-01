@@ -1,5 +1,6 @@
 package li.bezahl.scanner
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
@@ -62,6 +63,12 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
                     connect()
                 }
             } else {
+                AlertDialog.Builder(this)
+                        .setTitle(R.string.google_login_failed_title)
+                        .setMessage(R.string.google_login_failed_text)
+                        .setCancelable(false)
+                        .setOnDismissListener { finish() }
+                        .show()
                 Log.e(TAG, result.status.toString())
             }
         }

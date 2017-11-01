@@ -4,4 +4,6 @@
     <string name="google_drive_connection_failed">Failed to connect to Google Drive.</string>
     <string name="payment_added_message">Payment for %s added.</string>
     <string name="could_not_find_payment_in_qr_code">Could not find payment information in scanned content.</string>
+    <string name="google_login_failed_title">Google Login</string>
+    <string name="google_login_failed_text">Login failed.</string>
 </resources>
