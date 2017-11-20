@@ -1,4 +1,4 @@
-package li.bezahl.scanner
+package li.klass.bezahl.scanner
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -18,7 +18,6 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.drive.Drive
 import com.google.zxing.integration.android.IntentIntegrator
-import li.klass.bezahl.scanner.R
 
 class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
 

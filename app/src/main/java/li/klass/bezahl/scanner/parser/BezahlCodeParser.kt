@@ -1,8 +1,8 @@
-package li.klass.bezahlscanner.parser
+package li.klass.bezahl.scanner.parser
 
 import com.google.common.base.Charsets
-import li.bezahl.scanner.DateTimeProvider
-import li.bezahl.scanner.Payment
+import li.klass.bezahl.scanner.DateTimeProvider
+import li.klass.bezahl.scanner.Payment
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 

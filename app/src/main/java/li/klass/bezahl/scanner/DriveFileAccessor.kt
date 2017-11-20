@@ -1,4 +1,4 @@
-package li.bezahl.scanner
+package li.klass.bezahl.scanner
 
 import android.util.Log
 import com.google.android.gms.common.api.GoogleApiClient

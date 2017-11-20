@@ -2,9 +2,8 @@ package li.klass.bezahl.scanner.parser
 
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
-import li.bezahl.scanner.DateTimeProvider
-import li.bezahl.scanner.Payment
-import li.klass.bezahlscanner.parser.BezahlCodeParser
+import li.klass.bezahl.scanner.DateTimeProvider
+import li.klass.bezahl.scanner.Payment
 import org.assertj.core.api.Assertions.assertThat
 import org.joda.time.DateTime
 import org.junit.Test

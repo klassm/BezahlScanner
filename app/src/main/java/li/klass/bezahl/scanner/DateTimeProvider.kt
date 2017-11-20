@@ -1,4 +1,4 @@
-package li.bezahl.scanner
+package li.klass.bezahl.scanner
 
 import org.joda.time.DateTime
 

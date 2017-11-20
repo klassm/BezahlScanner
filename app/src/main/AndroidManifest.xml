@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme" >
         <activity
 
-            android:name="li.bezahl.scanner.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>

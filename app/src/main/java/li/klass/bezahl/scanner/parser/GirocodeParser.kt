@@ -1,7 +1,7 @@
-package li.klass.bezahlscanner.parser
+package li.klass.bezahl.scanner.parser
 
-import li.bezahl.scanner.DateTimeProvider
-import li.bezahl.scanner.Payment
+import li.klass.bezahl.scanner.DateTimeProvider
+import li.klass.bezahl.scanner.Payment
 import java.util.*
 
 class GirocodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {

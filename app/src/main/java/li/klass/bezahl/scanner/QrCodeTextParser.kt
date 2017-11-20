@@ -1,6 +1,6 @@
-package li.bezahl.scanner
+package li.klass.bezahl.scanner
 
-import li.klass.bezahlscanner.parser.Parsers
+import li.klass.bezahl.scanner.parser.Parsers
 import org.apache.commons.lang3.StringUtils
 
 class QrCodeTextParser {

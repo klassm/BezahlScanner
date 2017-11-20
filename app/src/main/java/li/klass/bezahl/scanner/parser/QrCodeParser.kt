@@ -1,6 +1,6 @@
-package li.klass.bezahlscanner.parser
+package li.klass.bezahl.scanner.parser
 
-import li.bezahl.scanner.Payment
+import li.klass.bezahl.scanner.Payment
 
 interface QrCodeParser {
     fun canParse(value: String): Boolean

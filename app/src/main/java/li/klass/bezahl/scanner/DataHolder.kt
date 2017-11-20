@@ -1,4 +1,4 @@
-package li.bezahl.scanner
+package li.klass.bezahl.scanner
 
 import com.google.common.base.Charsets
 import com.google.common.collect.ComparisonChain
@@ -13,7 +13,6 @@ import java.io.OutputStreamWriter
 import java.util.*
 
 class DataHolder(content: String) {
-
     private var payments: MutableList<Payment> = ArrayList()
 
     init {

@@ -1,6 +1,6 @@
-package li.klass.bezahlscanner.parser
+package li.klass.bezahl.scanner.parser
 
-import li.bezahl.scanner.DateTimeProvider
+import li.klass.bezahl.scanner.DateTimeProvider
 
 object Parsers {
     private val dateTimeProvider = DateTimeProvider()
