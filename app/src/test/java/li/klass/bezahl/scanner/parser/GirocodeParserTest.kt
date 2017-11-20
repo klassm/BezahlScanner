@@ -11,17 +11,18 @@ import org.junit.Test
 class GirocodeParserTest {
     @Test
     fun should_parse() {
-        val toParse = "BCD\n" +
-                "001\n" +
-                "1\n" +
-                "SCT\n" +
-                "AUGSDE77XXX\n" +
-                "Matthias Klass\n" +
-                "DE11720500000000061390\n" +
-                "EUR123\n" +
-                "CASH\n" +
-                "\n" +
-                "Test123"
+        val toParse = """
+            BCD
+            001
+            1
+            SCT
+            AUGSDE77XXX
+            Matthias Klass
+            DE11720500000000061390
+            EUR123
+            CASH
+
+            Test123""".trimIndent()
         val now = DateTime.now()
         val dateTimeProvider = mock<DateTimeProvider> { on { now() } doReturn now }
         val parser = GirocodeParser(dateTimeProvider)
@@ -40,14 +41,15 @@ class GirocodeParserTest {
 
     @Test
     fun should_parse_without_reason() {
-        val toParse = "BCD\n" +
-                "001\n" +
-                "2\n" +
-                "SCT\n" +
-                "SOLADES1PFD\n" +
-                "Girosolution GmbH\n" +
-                "DE19690516200000581900\n" +
-                "EUR1"
+        val toParse = """
+            BCD
+            001
+            2
+            SCT
+            SOLADES1PFD
+            Girosolution GmbH
+            DE19690516200000581900
+            EUR1""".trimIndent()
 
         val now = DateTime.now()
         val dateTimeProvider = mock<DateTimeProvider> { on { now() } doReturn now }
@@ -77,12 +79,8 @@ class GirocodeParserTest {
             IBAN
         """.trimIndent()
 
-        val now = DateTime.now()
-        val dateTimeProvider = mock<DateTimeProvider> { on { now() } doReturn now }
-        val parser = GirocodeParser(dateTimeProvider)
-
-        assertThat(parser.canParse(toParse)).isTrue()
-        assertThat(parser.parse(toParse)).isEqualTo(Payment(
+        val (now, result) = parse(toParse)
+        assertThat(result).isEqualTo(Payment(
                 iban = "IBAN",
                 amount = "",
                 currency = "EUR",
@@ -90,6 +88,44 @@ class GirocodeParserTest {
                 date = now,
                 name = "John Doe",
                 reason = ""
+        ))
+    }
+
+    private fun parse(toParse: String): Pair<DateTime, Payment?> {
+        val now = DateTime.now()
+        val dateTimeProvider = mock<DateTimeProvider> { on { now() } doReturn now }
+        val parser = GirocodeParser(dateTimeProvider)
+
+        assertThat(parser.canParse(toParse)).isTrue()
+        val result = parser.parse(toParse)
+        return Pair(now, result)
+    }
+
+    @Test
+    fun should_parse_something() {
+        val toParse = """
+            BCD
+            001
+            8
+            SCT
+            BIC
+            Name
+            IBAN
+            EUR188.5
+
+
+            BlaNummer BlaZweck
+            """.trimIndent()
+
+        val (now, result) = parse(toParse)
+        assertThat(result).isEqualTo(Payment(
+                iban = "IBAN",
+                amount = "188.5",
+                currency = "EUR",
+                bic = "BIC",
+                date = now,
+                name = "Name",
+                reason = "BlaNummer BlaZweck"
         ))
     }
 }

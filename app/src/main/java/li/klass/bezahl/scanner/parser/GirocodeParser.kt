@@ -6,10 +6,12 @@ import java.util.*
 
 class GirocodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
     override fun parse(value: String): Payment? {
-        val lines = value.split("[\r\n]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val lines = value.replace("\r\n", "\n")
+                .split("[\r\n]".toRegex())
+                .dropLastWhile { it.isEmpty() }.toTypedArray()
 
-        // Field 'reason' after first empty line
-        val indexEmptyLine = Arrays.asList(*lines).indexOf("")
+        // Field 'reason' after last empty line
+        val indexEmptyLine = Arrays.asList(*lines).lastIndexOf("")
 
         return Payment(
                 date = dateTimeProvider.now(),
