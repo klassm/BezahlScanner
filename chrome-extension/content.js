@@ -52,7 +52,7 @@ var configuration = {},
             type: "GET",
             url: "https://www.googleapis.com/drive/v3/files?q=name+%3D+%27bezahlScannerData%27+AND+mimeType+%3D+%27text%2Fcsv%27&key=" + apiKey,
             dataType: 'json',
-            async: false,
+            async: true,
             headers: {
                 "Authorization": "Bearer " + token
             },
@@ -70,7 +70,7 @@ var configuration = {},
             type: "GET",
             url: "https://www.googleapis.com/drive/v3/files/" + fileId + "?fields=webContentLink&key=" + apiKey,
             dataType: 'json',
-            async: false,
+            async: true,
             headers: {
                 "Authorization": "Bearer " + token
             },
@@ -132,19 +132,15 @@ var configuration = {},
         setTextField(configuration.reason, data.reason);
     },
     columnWithContent = function (content) {
-        var col = $("<td style='white-space: nowrap;padding:1px'/>");
+        var col = $("<td/>");
         col.html(content);
         return col;
     },
     createContentTable = function (data) {
-        var arrowImage = chrome.extension.getURL("right_arrow.png");
-        var table = $("<table/>");
+      var table = $("<table/>");
         data.map(function (el) {
-            var row = $("<tr/>"),
-                image = $("<img style='width:15px;height:15px' width='15px' height='15px' src='" + arrowImage + "'/>"),
-                imageCol = $("<td/>");
-
-            imageCol.append(image);
+            var row = $("<tr/>");
+            var imageCol = $("<td><div class='fill'>&rsaquo;</div></td>");
 
             row.append(columnWithContent(el.date));
             row.append(columnWithContent(el.name));
@@ -160,14 +156,17 @@ var configuration = {},
         }).forEach(function (el) {
             table.append(el);
         });
-        return table;
+
+        var surroundingBlock = $("<div class='bezahlscanner'/>");
+        surroundingBlock.append(table);
+        return surroundingBlock;
 
     },
     createContent = function (data) {
-        if (data.length == 0) {
+        if (data.length === 0) {
             return;
         }
-        data = data.slice(data.length - 5, data.length)
+        data = data.slice(data.length - 5, data.length);
 
         var content = $("<div id='bezahlScanner' class='block'/>"),
             table = createContentTable(data),
@@ -178,17 +177,20 @@ var configuration = {},
 
         table.hide();
         header.click(function () {
-            table.toggle(1000);
+            toggleTable(table);
         });
 
         // .cbox-banking: Sparkasse
         $(".if5_schrittfolge,.content-header,#f1-messages,#moneyTransfer_transferDataForm_accountDetails,.cbox-banking").prepend(content);
     },
+    toggleTable = function(table) {
+        table.slideToggle('slow');
+    },
     matchersFor = function (text) {
-        text = text.toUpperCase()
+        text = text.toUpperCase();
         return matchers.filter(function (matcher) {
             return matcher.text.find(function (matcherText) {
-                return text.indexOf(matcherText) != -1
+                return text.indexOf(matcherText) !== -1
             })
         });
     };

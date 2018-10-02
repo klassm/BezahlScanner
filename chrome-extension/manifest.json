@@ -1,6 +1,6 @@
 {
   "name": "BezahlScanner",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Inserts payment data into transaction forms.",
   "content_scripts": [
     {
@@ -12,6 +12,7 @@
         "3rdparty/jquery.csv-0.71.js",
         "content.js"
       ],
+      "css": ["style.css"],
       "run_at": "document_end"
     }
   ],

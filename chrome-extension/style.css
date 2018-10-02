@@ -1,0 +1,42 @@
+.bezahlscanner img.fill_image {
+    width: 35px;
+    height: 35px;
+}
+
+.bezahlscanner table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.bezahlscanner table td {
+    word-wrap: break-spaces;
+}
+
+.bezahlscanner .fill {
+    width: 35px;
+    height: 35px;
+    line-height: 30px;
+    background: #E0E0E0;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 3em;
+}
+
+.bezahlscanner .fill:hover {
+    background: #434343;
+    color: white;
+}
+
+.bezahlscanner tr {
+    border-bottom: 1px #f2f2f2 dotted;
+}
+
+.bezahlscanner tr:hover {
+    background: #f2f2f2;
+}
+
+.bezahlscanner td {
+    padding: 15px 10px;
+    vertical-align: middle;
+    border: 0;
+}
