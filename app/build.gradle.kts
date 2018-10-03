@@ -17,8 +17,6 @@ buildscript {
 val kotlinVersion = "1.2.71"
 
 plugins {
-    val kotlinPluginVersion = embeddedKotlinVersion
-
     id("com.android.application") version "3.2.0"
     id("net.researchgate.release").version("2.6.0")
     id("org.jetbrains.kotlin.android").version(embeddedKotlinVersion)
@@ -37,7 +35,7 @@ android {
         multiDexEnabled = true
         applicationId = "li.klass.bezahl.scanner"
         minSdkVersion(17)
-        targetSdkVersion(26)
+        targetSdkVersion(28)
         versionCode = getAppVersionCode()
         versionName = version.toString()
     }
@@ -90,8 +88,12 @@ dependencies {
     compile("com.android.support:appcompat-v7:$supportLibVersion")
     compile("com.android.support:design:$supportLibVersion")
     compile("com.google.zxing:android-integration:3.2.1")
-    compile("com.google.android.gms:play-services-auth:16.0.1")
-    compile("com.google.android.gms:play-services-drive:16.0.0")
+    compile("com.google.android.gms:play-services-auth:16.0.1") {
+        exclude(group = "com.android.support")
+    }
+    compile("com.google.android.gms:play-services-drive:16.0.0") {
+        exclude(group = "com.android.support")
+    }
     compile("org.apache.commons:commons-csv:1.2")
     compile("joda-time:joda-time:2.9.9")
     compile("org.apache.commons:commons-lang3:3.7")

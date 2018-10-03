@@ -38,7 +38,7 @@
         android:textSize="18sp"
         android:textColor="@color/abc_primary_text_material_light"
         android:textAlignment="textEnd"
-        android:gravity="right"
+        android:gravity="end"
         android:layout_alignBottom="@+id/bic"
         android:layout_alignParentEnd="true" />
     <TextView
