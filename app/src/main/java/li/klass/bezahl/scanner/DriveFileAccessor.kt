@@ -67,7 +67,7 @@ class DriveFileAccessor(private val googleApiClient: GoogleApiClient) {
                                         .setStarred(false).build()
 
                                 // create a file on root folder
-                                Drive.DriveApi.getRootFolder(googleApiClient)
+                                Drive.DriveApi.getRootFolder(googleApiClient)!!
                                         .createFile(googleApiClient, changeSet, result.driveContents)
                                         .setResultCallback({ driveFileResult ->
                                             if (driveFileResult.status.isSuccess) {
@@ -107,8 +107,7 @@ class DriveFileAccessor(private val googleApiClient: GoogleApiClient) {
     }
 
     companion object {
-
-        val FILE_TITLE = "bezahlScannerData"
+        const val FILE_TITLE = "bezahlScannerData"
         private val TAG = DriveFileAccessor::class.java.name
     }
 }

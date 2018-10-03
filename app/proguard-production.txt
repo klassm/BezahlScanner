@@ -6,6 +6,7 @@
 -keepattributes Signature
 -keep class li.klass.** { *; }
 -keep class android.** { *; }
+-keep class com.google.** { *; }
 
 # Joda-Time
 

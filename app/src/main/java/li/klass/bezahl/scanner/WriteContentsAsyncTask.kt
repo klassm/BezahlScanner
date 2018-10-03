@@ -3,7 +3,6 @@ package li.klass.bezahl.scanner
 import android.os.AsyncTask
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.drive.DriveFile
-import com.google.common.base.Charsets
 import java.io.IOException
 
 class WriteContentsAsyncTask(private val googleApiClient: GoogleApiClient, private val contentToWrite: String) : AsyncTask<DriveFile, Void, Void>() {

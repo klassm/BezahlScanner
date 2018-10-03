@@ -1,8 +1,5 @@
 package li.klass.bezahl.scanner
 
-import com.google.common.base.Charsets
-import com.google.common.collect.ComparisonChain
-import com.google.common.collect.FluentIterable.from
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVPrinter
@@ -17,9 +14,9 @@ class DataHolder(content: String) {
 
     init {
         try {
-            val records = from(CSVParser.parse(content, CSV_FORMAT)).skip(1).toList()
+            val records = CSVParser.parse(content, CSV_FORMAT).drop(1).toList()
 
-            payments = records.map {
+            payments = records.asSequence().map {
                 Payment(
                         name = it.get(NAME),
                         amount = it.get(AMOUNT),
@@ -29,7 +26,7 @@ class DataHolder(content: String) {
                         date = DateTime.parse(it.get(DATE))
                 )
             }
-                    .sortedWith(PAYMENT_COMPARATOR)
+                    .sortedWith(compareBy({ it.date }, { it.name }, { it.iban }))
                     .toMutableList()
         } catch (e: IOException) {
             throw RuntimeException(e)
@@ -67,19 +64,14 @@ class DataHolder(content: String) {
     }
 
     companion object {
-        val PAYMENT_COMPARATOR: Comparator<Payment> = Comparator { z1, z2 ->
-            ComparisonChain.start()
-                    .compare(z1.date, z2.date)
-                    .compare(z1.name, z2.name)
-                    .compare(z1.iban, z2.iban)
-                    .result()
-        }
-        val DATE = "date"
-        val NAME = "name"
-        val BIC = "bic"
-        val IBAN = "iban"
-        val AMOUNT = "amount"
-        val REASON = "reason"
-        val CSV_FORMAT = CSVFormat.DEFAULT.withHeader(DATE, NAME, BIC, IBAN, AMOUNT, REASON)
+        private const val DATE = "date"
+        private const val NAME = "name"
+        private const val BIC = "bic"
+        private const val IBAN = "iban"
+        private const val AMOUNT = "amount"
+        private const val REASON = "reason"
+
+        @JvmStatic
+        private val CSV_FORMAT = CSVFormat.DEFAULT.withHeader(DATE, NAME, BIC, IBAN, AMOUNT, REASON)
     }
 }

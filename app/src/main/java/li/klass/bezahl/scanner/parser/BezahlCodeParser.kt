@@ -1,12 +1,11 @@
 package li.klass.bezahl.scanner.parser
 
-import com.google.common.base.Charsets
 import li.klass.bezahl.scanner.DateTimeProvider
 import li.klass.bezahl.scanner.Payment
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 
-class BezahlCodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
+class BezahlCodeParser(private val dateTimeProvider: DateTimeProvider) : QrCodeParser {
     override fun canParse(value: String): Boolean = value.startsWith(SINGLEPAYMENT_PREFIX)
 
     override fun parse(value: String): Payment? {
@@ -28,8 +27,8 @@ class BezahlCodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
 
         for (part in parts) {
             val elements = part.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            val splitKey = elements.getOrElse(0, { "" })
-            val splitValue = elements.getOrElse(1, { "" })
+            val splitKey = elements.getOrElse(0) { "" }
+            val splitValue = elements.getOrElse(1) { "" }
             when (splitKey) {
                 "name" -> name = splitValue
                 "reason" -> reason = splitValue
@@ -51,6 +50,6 @@ class BezahlCodeParser(val dateTimeProvider: DateTimeProvider) : QrCodeParser {
     }
 
     companion object {
-        val SINGLEPAYMENT_PREFIX = "bank://singlepaymentsepa?"
+        const val SINGLEPAYMENT_PREFIX = "bank://singlepaymentsepa?"
     }
 }
