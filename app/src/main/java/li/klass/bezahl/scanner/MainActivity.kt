@@ -23,9 +23,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.common.api.ApiException
 
-
-
-
 class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
 
     private var googleApiClient: GoogleApiClient? = null
@@ -70,7 +67,7 @@ class MainActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedList
         try {
             val account = completedTask.getResult(ApiException::class.java)
 
-            Log.e(TAG, "sign in success with account " + account.displayName)
+            Log.e(TAG, "sign in success with account " + account?.displayName)
             if (googleApiClient != null) {
                 connect()
             }

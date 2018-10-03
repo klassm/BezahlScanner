@@ -5,6 +5,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+task(name = "clean", type = Delete::class) {
+    delete(rootProject.buildDir)
 }
