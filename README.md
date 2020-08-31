@@ -1,3 +1,6 @@
+**This project is no longer maintained.**
+
+
 # BezahlScanner
 
 Scan QR-Codes for payments comfortably on your Android phone. When logging in to your favorite bank account in Chrome, just click on the payment you want to make. All the payment data will be put into the respective form field, so that you don't need to care about typos or so.
